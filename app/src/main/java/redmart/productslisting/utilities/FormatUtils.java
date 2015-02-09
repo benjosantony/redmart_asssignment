@@ -7,7 +7,7 @@ import java.text.DecimalFormat;
  */
 public class FormatUtils {
 
-    private static DecimalFormat cashDecimalFormat = new DecimalFormat("#.00");
+    private static DecimalFormat cashDecimalFormat = new DecimalFormat("#0.00");
 
     public static String  getDollarString (double doubleValue){
         return cashDecimalFormat.format(doubleValue);

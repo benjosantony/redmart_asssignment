@@ -1,11 +1,16 @@
 package redmart.productslisting;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import redmart.productslisting.dao.ProductsDAO;
+import redmart.productslisting.fragments.ProductDetailsFragment;
 import redmart.productslisting.fragments.ProductFragment;
+import redmart.productslisting.models.Product;
 
 
 public class HomeActivity extends ActionBarActivity implements ProductFragment.onProductFragmentInteractionListener {
@@ -16,11 +21,12 @@ public class HomeActivity extends ActionBarActivity implements ProductFragment.o
         setContentView(R.layout.activity_home);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, ProductFragment.newInstance())
+                    .replace(R.id.container, ProductFragment.newInstance(), ProductFragment.TAG)
                     .commit();
+
+
         }
     }
-
 
 
     @Override
@@ -31,7 +37,6 @@ public class HomeActivity extends ActionBarActivity implements ProductFragment.o
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -39,13 +44,19 @@ public class HomeActivity extends ActionBarActivity implements ProductFragment.o
     }
 
 
-
     @Override
-    public void onProductItemClick(long id) {
-        //TODO add the product details fragment
-        //TODO make the  action bar press back
-    }
+    public void onProductItemClick(int  position) {
 
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        Product product = ProductsDAO.get(position);
+        fragmentTransaction.replace(R.id.container, ProductDetailsFragment.newInstance(product.getId(),product.getTitle()));
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
+
+    }
 
 
 }

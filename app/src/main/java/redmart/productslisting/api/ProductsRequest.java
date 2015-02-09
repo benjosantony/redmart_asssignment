@@ -16,11 +16,11 @@ import redmart.productslisting.utilities.ApiConstants;
 
 public class ProductsRequest extends JsonObjectRequest {
 
-    private static final String TAG = ProductsRequest.class.getSimpleName();
+
 
     public ProductsRequest(Response.Listener<JSONObject> listener, Response.ErrorListener errorListener,List<NameValuePair> params) {
         super(ApiConstants.PRODUCTS_LIST_URL + "?" + URLEncodedUtils.format(params, "UTF-8"),
                 null, listener, errorListener);
-        setTag(TAG);
+
     }
 }

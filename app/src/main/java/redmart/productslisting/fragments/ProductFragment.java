@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +41,7 @@ import redmart.productslisting.parsers.ProductsListParser;
  */
 public class ProductFragment extends Fragment implements AbsListView.OnItemClickListener , ProductsAdapter.onProductsAdapterReachLastItemListener{
 
-    private static final String TAG = ProductFragment.class.getSimpleName();
+    public  static final String TAG = ProductFragment.class.getSimpleName();
     private onProductFragmentInteractionListener mListener;
     ProductsListingApplication productsListingApplication;
 
@@ -84,6 +86,15 @@ public class ProductFragment extends Fragment implements AbsListView.OnItemClick
 
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ActionBar ab = ((ActionBarActivity)getActivity()).getSupportActionBar();
+        ab.setTitle("Products Listing");
+        ab.setDisplayHomeAsUpEnabled(false);
+        ab.setDisplayShowHomeEnabled(false);
+    }
 
     private void fetchProducts() {
 
@@ -170,7 +181,7 @@ public class ProductFragment extends Fragment implements AbsListView.OnItemClick
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onProductItemClick(ProductsDAO.getProductsList().get(position).getId());
+            mListener.onProductItemClick(position);
         }
     }
 
@@ -198,7 +209,7 @@ public class ProductFragment extends Fragment implements AbsListView.OnItemClick
      */
     public interface onProductFragmentInteractionListener {
 
-        public void onProductItemClick(long id);
+        public void onProductItemClick(int  position);
     }
 
 

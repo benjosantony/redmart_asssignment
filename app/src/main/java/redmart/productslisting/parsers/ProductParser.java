@@ -26,6 +26,9 @@ public class ProductParser extends BaseParser {
     private static final String KEY_NAME_IMG = "img";
 
 
+    private static final String KEY_NAME_PRODUCT = "product";
+
+
     /**
      * @param response
      */
@@ -42,6 +45,16 @@ public class ProductParser extends BaseParser {
 
     public Product parse() {
         Product product = new Product();
+        JSONObject jsonProduct;
+        try {
+            if (jsonResults.has(KEY_NAME_PRODUCT)){
+                jsonProduct = jsonResults.getJSONObject(KEY_NAME_PRODUCT);
+                product =  parse(jsonProduct);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
         return product;
     }
@@ -53,7 +66,7 @@ public class ProductParser extends BaseParser {
      */
     public static Product parse(JSONObject jsonProduct) {
         Product product = new Product();
-
+        if (jsonProduct == null) return product;
         try {
 
             // ID
