@@ -25,6 +25,6 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.0'
     compile 'me.neavo:volley:2014.12.09'
     compile 'fr.baloomba:viewpagerindicator:2.4.2'
-    compile 'com.hannesdorfmann.smoothprogressbar:library:1.0.0'
+
 
 }
