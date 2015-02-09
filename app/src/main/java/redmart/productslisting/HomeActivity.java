@@ -16,13 +16,10 @@ public class HomeActivity extends ActionBarActivity implements ProductFragment.o
         setContentView(R.layout.activity_home);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new ProductFragment())
+                    .replace(R.id.container, ProductFragment.newInstance())
                     .commit();
         }
     }
-
-
-
 
 
 
@@ -32,6 +29,8 @@ public class HomeActivity extends ActionBarActivity implements ProductFragment.o
         getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

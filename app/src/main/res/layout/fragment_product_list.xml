@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     tools:context="redmart.productslisting.fragments.ProductFragment">
 
-    <ListView android:id="@android:id/list" android:layout_width="match_parent"
+    <ListView  android:smoothScrollbar="true" android:scrollbarSize="1dp" android:scrollbarStyle="outsideOverlay" android:paddingLeft="10dp" android:paddingRight="10dp" android:background="@android:color/white" android:id="@android:id/list" android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <TextView android:id="@android:id/empty" android:layout_width="match_parent"

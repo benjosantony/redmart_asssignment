@@ -28,4 +28,8 @@ public class Image {
         this.position = position;
     }
 
+    public String getImageUrl (){
+        return BASE_URL + getName() ;
+    }
+
 }

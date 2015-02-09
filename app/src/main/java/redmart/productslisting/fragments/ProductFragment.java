@@ -2,7 +2,9 @@ package redmart.productslisting.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +13,19 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import redmart.productslisting.ProductsListingApplication;
 import redmart.productslisting.R;
 import redmart.productslisting.adapters.ProductsAdapter;
 import redmart.productslisting.dao.ProductsDAO;
+import redmart.productslisting.models.Product;
+import redmart.productslisting.parsers.ProductsListParser;
 
 
 /**
@@ -25,18 +37,17 @@ import redmart.productslisting.dao.ProductsDAO;
  * Activities containing this fragment MUST implement the {@link redmart.productslisting.fragments.ProductFragment.onProductFragmentInteractionListener}
  * interface.
  */
-public class ProductFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class ProductFragment extends Fragment implements AbsListView.OnItemClickListener , ProductsAdapter.onProductsAdapterReachLastItemListener{
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private static final String TAG = ProductFragment.class.getSimpleName();
     private onProductFragmentInteractionListener mListener;
+    ProductsListingApplication productsListingApplication;
+
+
+    private static final int PAGE_SIZE  =  10;
+
+    protected int page = 0;
+    protected  int  totalCount =  0;
 
     /**
      * The fragment's ListView/GridView.
@@ -47,15 +58,12 @@ public class ProductFragment extends Fragment implements AbsListView.OnItemClick
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private ListAdapter mAdapter;
+    private ProductsAdapter mAdapter;
 
-    // TODO: Rename and change types of parameters
-    public static ProductFragment newInstance(String param1, String param2) {
+
+    // No arguments for now as we do not have viewpagers and different tabs
+    public static ProductFragment newInstance() {
         ProductFragment fragment = new ProductFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -70,30 +78,72 @@ public class ProductFragment extends Fragment implements AbsListView.OnItemClick
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAdapter = new ProductsAdapter(getActivity(),this);
+        productsListingApplication = (ProductsListingApplication) getActivity().getApplication();
 
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
+    }
+
+
+    private void fetchProducts() {
+
+        int lastPageIndex =  0;
+        if (ProductsDAO.getProductsList().size() ==0){
+            page = 0;
+        } else {
+            ++page;
+            if (totalCount % PAGE_SIZE == 0)
+                lastPageIndex =  (totalCount / PAGE_SIZE) -1;
+            else
+                lastPageIndex = totalCount/PAGE_SIZE;
         }
 
-        // TODO: Change Adapter to display your content
-        mAdapter =  new ProductsAdapter();
+
+        if (page <= lastPageIndex && getActivity() != null){
+            // Fetch the products as needed
+            productsListingApplication.getRedMartAPI().getProducts(page,PAGE_SIZE,"red-wine",new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject jsonObject) {
+                    Log.e(TAG, jsonObject.toString());
+                    ProductsListParser productsListParser = new ProductsListParser(jsonObject);
+                    totalCount = productsListParser.totalCount();
+                    page = productsListParser.page();
+                    ArrayList<Product> products  = productsListParser.parseProducts();
+                    ProductsDAO.appendToList(products);
+                    mAdapter.notifyDataSetChanged();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    // TODO to be implemented
+                }
+            });
+        }
+
+
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_product, container, false);
-
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
-
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
 
         return view;
     }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        fetchProducts();
+    }
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -110,6 +160,8 @@ public class ProductFragment extends Fragment implements AbsListView.OnItemClick
     public void onDetach() {
         super.onDetach();
         mListener = null;
+
+        productsListingApplication.getmRequestQueue().cancelAll(TAG);
     }
 
 
@@ -118,7 +170,7 @@ public class ProductFragment extends Fragment implements AbsListView.OnItemClick
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onProductItemClick(ProductsDAO.getProductsList().get(position).id);
+            mListener.onProductItemClick(ProductsDAO.getProductsList().get(position).getId());
         }
     }
 
@@ -135,6 +187,11 @@ public class ProductFragment extends Fragment implements AbsListView.OnItemClick
         }
     }
 
+    @Override
+    public void onProductsAdapterReachLastItem() {
+        fetchProducts();
+    }
+
     /**
      * This is the general way of communicating to activity
      * An alternative way is to use  otto bus for handling events for bigger applications
@@ -143,5 +200,6 @@ public class ProductFragment extends Fragment implements AbsListView.OnItemClick
 
         public void onProductItemClick(long id);
     }
+
 
 }

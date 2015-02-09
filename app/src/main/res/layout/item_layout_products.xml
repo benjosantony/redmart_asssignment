@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp">
+
+    <ImageView
+        android:background="@android:color/white"
+        android:focusable="false"
+        android:clickable="false"
+        android:id="@+id/ivProductImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:padding="2dp"
+        android:src="@drawable/dummy_image" />
+
+    <!--Linear Layout for details-->
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_toRightOf="@id/ivProductImage"
+        android:gravity="left"
+        android:orientation="vertical"
+        android:paddingTop="10dp">
+
+        <!--Product Title-->
+        <TextView
+            android:id="@+id/tvProductTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Product Title" />
+
+        <!--Product Qty-->
+        <TextView
+            android:id="@+id/tvProductQty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvProductTitle"
+            android:text="Qty" />
+
+        <!-- Promotion  / Sold out-->
+        <TextView
+            android:id="@+id/tvProductPromoText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="Sold out" />
+
+
+    </RelativeLayout>
+
+    <!--Price Values-->
+    <LinearLayout
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:gravity="right"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tvPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="Price" />
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:id="@+id/tvPromoPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="Promo Price" />
+    </LinearLayout>
+
+
+</RelativeLayout>

@@ -11,6 +11,15 @@ public class Product {
     private String title;
     private String desc;
     private Price price;
+    private String volumeWeight ;
+
+    public String getVolumeWeight() {
+        return volumeWeight;
+    }
+
+    public void setVolumeWeight(String volumeWeight) {
+        this.volumeWeight = volumeWeight;
+    }
 
     public Price getPrice() {
         return price;
