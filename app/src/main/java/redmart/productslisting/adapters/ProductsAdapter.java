@@ -88,6 +88,13 @@ public class ProductsAdapter extends BaseAdapter {
         String savingsText = price.getSavingsText();
         savingsText = price.isOnSale() ? savingsText : "SOLD OUT";
         holder.tvPromo.setText(savingsText);
+
+        if (price.isOnSale()){
+             holder.tvPromo.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.promo_text_background));
+        } else {
+            holder.tvPromo.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.sold_out_text_background));
+        }
+
         holder.tvPromotionalPrice.setText("S$" + FormatUtils.getDollarString(price.getPromoPrice()));
         holder.tvOriginalPrice.setText("S$" + FormatUtils.getDollarString(price.getPrice()));
         return convertView;
