@@ -13,7 +13,7 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:padding="2dp"
-        android:src="@drawable/dummy_image" />
+        />
 
     <!--Linear Layout for details-->
     <RelativeLayout
@@ -22,10 +22,12 @@
         android:layout_toRightOf="@id/ivProductImage"
         android:gravity="left"
         android:orientation="vertical"
-        android:paddingTop="10dp">
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
 
         <!--Product Title-->
         <TextView
+            android:textColor="@android:color/black"
             android:id="@+id/tvProductTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,6 +36,7 @@
         <!--Product Qty-->
         <TextView
             android:id="@+id/tvProductQty"
+            android:textColor="#a0a0a0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvProductTitle"
@@ -41,6 +44,11 @@
 
         <!-- Promotion  / Sold out-->
         <TextView
+
+            android:padding="5dp"
+            android:background="@drawable/promo_text_background"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
             android:id="@+id/tvProductPromoText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,6 +60,7 @@
 
     <!--Price Values-->
     <LinearLayout
+        android:paddingBottom="10dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:gravity="right"
@@ -59,6 +68,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <TextView
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
             android:id="@+id/tvPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -66,6 +77,8 @@
             android:text="Price" />
 
         <TextView
+            android:textStyle="bold"
+            android:textColor="#ffce2347"
             android:layout_marginLeft="10dp"
             android:id="@+id/tvPromoPrice"
             android:layout_width="wrap_content"

@@ -2,20 +2,20 @@ package redmart.productslisting.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.squareup.picasso.Picasso;
-
 import redmart.productslisting.R;
 import redmart.productslisting.dao.ProductsDAO;
 import redmart.productslisting.models.Image;
 import redmart.productslisting.models.Price;
 import redmart.productslisting.models.Product;
+import redmart.productslisting.utilities.FormatUtils;
 
 
 public class ProductsAdapter extends BaseAdapter {
@@ -65,6 +65,8 @@ public class ProductsAdapter extends BaseAdapter {
             ViewHolder holder = new ViewHolder();
             holder.ivProductImage = (ImageView) convertView.findViewById(R.id.ivProductImage);
             holder.tvOriginalPrice = (TextView) convertView.findViewById(R.id.tvPrice);
+            // Set the strike through
+            holder.tvOriginalPrice.setPaintFlags(holder.tvOriginalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             holder.tvPromotionalPrice = (TextView) convertView.findViewById(R.id.tvPromoPrice);
             holder.tvPromo = (TextView) convertView.findViewById(R.id.tvProductPromoText);
             holder.tvQty = (TextView) convertView.findViewById(R.id.tvProductQty);
@@ -86,8 +88,8 @@ public class ProductsAdapter extends BaseAdapter {
         String savingsText = price.getSavingsText();
         savingsText = price.isOnSale() ? savingsText : "SOLD OUT";
         holder.tvPromo.setText(savingsText);
-        holder.tvPromotionalPrice.setText(String.valueOf(price.getPromoPrice()));
-        holder.tvOriginalPrice.setText(String.valueOf(price.getPrice()));
+        holder.tvPromotionalPrice.setText("S$" + FormatUtils.getDollarString(price.getPromoPrice()));
+        holder.tvOriginalPrice.setText("S$" + FormatUtils.getDollarString(price.getPrice()));
         return convertView;
     }
 
